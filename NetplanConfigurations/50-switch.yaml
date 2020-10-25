@@ -1,0 +1,13 @@
+---
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s9:
+      addresses:
+        - 172.16.0.126/25
+      gateway4: 172.16.0.126
+    enp0s10:
+      addresses:
+        - 172.16.1.254/24
+      gateway4: 172.16.1.254

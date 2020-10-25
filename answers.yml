@@ -1,0 +1,18 @@
+FirstName: Giuseppe
+LastName: Superbo
+MatriculationNumber: 220376
+AcademicYear: 2020-2021
+GitHubUrl: https://github.com/SuperboGiuseppe/dncs-lab
+Subnets:
+  HostsA:
+    RequiredAddresses: 119
+    SubnetAddress: YourHostsASubnetAddress
+    SubnetPrefixLength: YourHostsASubnetPrefixLength
+  HostsB:
+    RequiredAddresses: 195
+    SubnetAddress: YourHostsBSubnetAddress
+    SubnetPrefixLength: YourHostsBSubnetPrefixLength
+  Hub:
+    RequiredAddresses: 412
+    SubnetAddress: YourHubSubnetAddress
+    SubnetPrefixLength: YourHubSubnetPrefixLength
