@@ -1,0 +1,23 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s9:
+      addresses:
+        - 10.1.1.1/24
+      routes:
+        - to: 172.16.4.0/23
+          via: 10.1.1.2
+    enp0s8:
+      dhcp4: yes
+    enp0s8: {}
+  vlans:
+    enp0s8_2:
+      id: 2
+      link: enp0s8
+      addresses: [ "172.16.0.1/25" ]
+    enp0s8_3:
+      id: 3
+      link: enp0s8
+      addresses: [ "172.16.1.1/24" ]
+

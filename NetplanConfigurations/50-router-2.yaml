@@ -1,0 +1,13 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s9:
+      addresses:
+        - 10.1.1.2/24
+      routes:
+        - to: 172.16.0.0/22
+          via: 10.1.1.1
+    enp0s8:
+      addresses:
+        - 172.16.4.1/23
