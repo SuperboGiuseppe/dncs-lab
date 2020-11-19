@@ -117,4 +117,79 @@ The assignment deliverable consists of a Github repository containing:
 
 
 # Design
-[ Your work goes here ]
+
+## Address space
+As show in the previous table the subnetting was performed by choosing the smallest netmask range that could satisfy the requirement. This design is based on the principle of not allocating an excessive number of addresses. In addition to the subnets of the requirements, an additional subnet was included in the network design: the two routers have their own subnet. This choice was made in order to have a distinct address space for the router.
+
+## Subnet table
+
+| Subnet name    | Network address/Netmask | Subnet mask     | Beginning address | Ending address | Number of available addresses | Requirement for the available addresses |
+|----------------|-------------------------|-----------------|-------------------|----------------|-------------------------------|-----------------------------------------|
+| Host-a subnet  | 172.16.0.0/25           | 255.255.255.128 | 172.16.0.1        | 172.16.0.126   | 126                           | 119                                     |
+| Host-b subnet  | 172.16.1.0/24           | 255.255.255.0   | 172.16.1.1        | 172.16.1.254   | 254                           | 195                                     |
+| Host-c subnet  | 172.16.4.0/23           | 255.255.254.0   | 172.16.4.1        | 172.16.5.254   | 510                           | 412                                     |
+| Routers subnet | 10.1.1.0/24             | 255.255.255.0   | 10.1.1.1          | 10.1.1.254     | 254                           | N/A                                     |
+<br>
+Note:
+
+  - The beginning address does not take on account the network address as it is not usable;
+  - The ending address does not take on account the broadcast address as it is not usable.
+
+## Network design diagram
+
+![Overview of the network](NetworkDiagram.png)
+
+# Configuration
+
+## Host configuration
+Network configuration of each host was performed by importing a yaml configuration file written in netplan syntax. The entire network has been configured as shown in the design phase. 
+
+## Routing configuration
+For each host, static routing rules have been configured in order to enable connection between subnets.
+### Host A
+| Network Destination | Gateway    | Netmask       | Interface |
+|---------------------|------------|---------------|-----------|
+| 172.16.0.0          | 172.16.0.1 | 255.255.248.0 | enp0s8    |
+| 10.1.1.0            | 172.16.0.1 | 255.255.255.0 | enp0s8    |
+
+### Host B
+| Network Destination | Gateway    | Netmask       | Interface |
+|---------------------|------------|---------------|-----------|
+| 172.16.0.0          | 172.16.1.1 | 255.255.248.0 | enp0s8    |
+| 10.1.1.0            | 172.16.1.1 | 255.255.255.0 | enp0s8    |
+
+### Host C
+| Network Destination | Gateway    | Netmask       | Interface |
+|---------------------|------------|---------------|-----------|
+| 172.16.0.0          | 172.16.0.1 | 255.255.248.0 | enp0s8    |
+| 10.1.1.0            | 172.16.0.1 | 255.255.255.0 | enp0s8    |
+
+### Router-1
+| Network Destination | Gateway    | Netmask       | Interface |
+|---------------------|------------|---------------|-----------|
+| 172.16.4.0          | 10.1.1.2   | 255.255.255.0 | enp0s9    |
+
+### Router-2
+| Network Destination | Gateway    | Netmask       | Interface |
+|---------------------|------------|---------------|-----------|
+| 172.16.0.0          | 10.1.1.1   | 255.255.252.0 | enp0s9    |
+
+## Switch configuration
+As stated in the requirements of the assignment, the switch must be configured by using openswitch functionalities. In this case a bridge called "switch" is created. To this switch three interfaces are attached:
+
+  - enp0s8 where router-1 is attached;
+  - enp0s9 where host-a is attached;
+  - enp0s10 where host-b is attached.
+
+More precisly, in order to be able to route correctly the packets, two vlans are configured in router-1 and so in the switch:
+  - ID: 2 for the network 172.16.0.0/25
+  - ID: 3 for the network 172.16.1.0/24
+
+## Docker website container configuration
+As requested by the assignment requirments, a docker container must be executed in the host-c. In the provisioning script file of the host-c (docker_container.sh) there are all the instructions in order to correctly configure a website available on port 80. 
+For this reason the website can be reached by launching the following command: "curl 172.16.4.2 80".
+
+
+
+
+
